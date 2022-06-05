@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const Header = () => {
+export const Header = () => {
   return (
     <div>
       <nav className="flex bg-emerald-500 p-3 pl-5 font-bold text-white">
@@ -14,5 +14,3 @@ const Header = () => {
     </div>
   );
 };
-
-export default Header;
