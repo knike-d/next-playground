@@ -1,11 +1,12 @@
-import type { NextPage } from "next";
+import type { InferGetStaticPropsType, NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { Post } from "../models/article";
 
-const articleList = [...Array(2).keys()];
+type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Articles: NextPage = () => {
+const Articles: NextPage<Props> = ({ posts }) => {
   const router = useRouter();
 
   return (
@@ -16,12 +17,11 @@ const Articles: NextPage = () => {
       <main>
         <h1>記事一覧</h1>
         <ul>
-          {articleList.map((el, index) => {
-            const articleNumber = index + 1;
+          {posts.map((post) => {
             return (
-              <li>
-                <Link href={`${router.pathname}/${articleNumber}`}>
-                  <a>記事{articleNumber}</a>
+              <li key={post.id}>
+                <Link href={`${router.pathname}/${post.id}`}>
+                  <a>title：{post.title}</a>
                 </Link>
               </li>
             );
@@ -30,6 +30,15 @@ const Articles: NextPage = () => {
       </main>
     </div>
   );
+};
+
+export const getStaticProps = async () => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/`);
+  const posts: Post[] = await res.json();
+
+  return {
+    props: { posts },
+  };
 };
 
 export default Articles;
