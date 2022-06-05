@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { Post } from "../../models/article";
+import { Post } from "@/models/article";
 
 type Params = {
   id: string;
