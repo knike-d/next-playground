@@ -1,12 +1,13 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
-import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Post } from "@/models/article";
+import { Article } from "@/models/article";
+import { maxDisplayArticlesCount } from "@/constants/article";
+import { ThumbnailCard } from "@/components/atoms/ThumnailCard";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Articles: NextPage<Props> = ({ posts }) => {
+const Articles: NextPage<Props> = ({ displayArticles }) => {
   const router = useRouter();
 
   return (
@@ -16,17 +17,11 @@ const Articles: NextPage<Props> = ({ posts }) => {
       </Head>
       <main>
         <h1>記事一覧</h1>
-        <ul>
-          {posts.map((post) => {
-            return (
-              <li key={post.id}>
-                <Link href={`${router.pathname}/${post.id}`}>
-                  <a>title：{post.title}</a>
-                </Link>
-              </li>
-            );
+        <div>
+          {displayArticles.map((articleInfo) => {
+            return <ThumbnailCard card={articleInfo} />;
           })}
-        </ul>
+        </div>
       </main>
     </div>
   );
@@ -34,10 +29,10 @@ const Articles: NextPage<Props> = ({ posts }) => {
 
 export const getStaticProps = async () => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/`);
-  const posts: Post[] = await res.json();
+  const displayArticles: Article[] = await res.json();
 
   return {
-    props: { posts },
+    props: { displayArticles: displayArticles.slice(0, maxDisplayArticlesCount) },
   };
 };
 

@@ -1,17 +1,18 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { Post } from "@/models/article";
+import { Article } from "@/models/article";
+import { maxDisplayArticlesCount } from "@/constants/article";
 
 type Params = {
   id: string;
 };
 
 type Props = {
-  post: Post;
+  article: Article;
 };
 
-const Article: NextPage<Props> = ({ post }) => {
+const Article: NextPage<Props> = ({ article }) => {
   const router = useRouter();
 
   return (
@@ -21,8 +22,8 @@ const Article: NextPage<Props> = ({ post }) => {
       </Head>
       <main>
         <h1>記事番号：{router.query.id}</h1>
-        <p>{post.title}</p>
-        <p>{post.body}</p>
+        <p>{article.title}</p>
+        <p>{article.body}</p>
       </main>
     </div>
   );
@@ -30,9 +31,10 @@ const Article: NextPage<Props> = ({ post }) => {
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/`);
-  const posts: Post[] = await res.json();
+  const articles: Article[] = await res.json();
+  const displayArticles = articles.slice(0, maxDisplayArticlesCount);
 
-  const paths = posts.map((el) => {
+  const paths = displayArticles.map((el) => {
     return {
       params: {
         id: el.id.toString(),
@@ -50,10 +52,10 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }) 
   }
 
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${params.id}/`);
-  const post: Post = await res.json();
+  const article: Article = await res.json();
 
   return {
-    props: { post },
+    props: { article },
   };
 };
 
