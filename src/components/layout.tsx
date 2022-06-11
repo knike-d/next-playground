@@ -6,7 +6,7 @@ export const Layout = ({ children }: Props) => {
   return (
     <>
       <Header />
-      {children}
+      <div className="m-auto my-7 max-w-5xl">{children}</div>
       <Footer />
     </>
   );

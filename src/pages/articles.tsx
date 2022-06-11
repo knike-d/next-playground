@@ -1,29 +1,31 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { Article } from "@/models/article";
-import { maxDisplayArticlesCount } from "@/constants/article";
 import { ThumbnailCard } from "@/components/atoms/ThumnailCard";
+import { maxDisplayArticlesCount } from "@/constants/article";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const Articles: NextPage<Props> = ({ displayArticles }) => {
-  const router = useRouter();
+  const blankDivCount = 3 - (displayArticles.length % 3);
 
   return (
-    <div>
+    <>
       <Head>
         <title>Articles Page</title>
       </Head>
       <main>
-        <h1>記事一覧</h1>
-        <div>
+        <h1 className="mb-4 text-2xl font-medium">記事一覧</h1>
+        <div className="m-auto flex max-w-4xl flex-wrap justify-center gap-x-6 gap-y-10">
           {displayArticles.map((articleInfo) => {
             return <ThumbnailCard card={articleInfo} />;
           })}
+          {[...Array(blankDivCount)].map((el) => {
+            return <div className="block h-0 w-64" />;
+          })}
         </div>
       </main>
-    </div>
+    </>
   );
 };
 

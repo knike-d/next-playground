@@ -13,9 +13,9 @@ export const ThumbnailCard = ({ card }: Props) => {
   const router = useRouter();
 
   return (
-    <article className="h-60 w-60 rounded-xl border-2">
+    <article className="h-64 w-64 rounded-xl border-2">
       <Link href={`${router.pathname}/${card.id}`}>
-        <a className="block ">
+        <a className="block">
           <div className="flex items-center justify-center bg-slate-200 py-4">{imageIcon()}</div>
           <div className="p-2">
             <p className="break-words">{card.title}</p>
