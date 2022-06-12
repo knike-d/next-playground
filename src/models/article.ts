@@ -4,3 +4,10 @@ export type Article = {
   title: string;
   body: string;
 };
+
+export type ArticleDetail = {
+  userName: string;
+  id: number;
+  title: string;
+  body: string;
+};
