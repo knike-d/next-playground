@@ -19,10 +19,10 @@ const Article: NextPage<Props> = ({ articleDetail }) => {
         <title>Article Page</title>
       </Head>
       <main className="m-auto max-w-2xl">
-        <div className="flex h-96 w-full  items-center justify-center bg-slate-300">
+        <div className="flex h-60 w-full items-center justify-center bg-slate-300 sm:h-96">
           <h1 className="w-4/5 break-words text-3xl">{articleDetail.title}</h1>
         </div>
-        <div className="mt-8">
+        <div className="mx-4 mt-8">
           <h1 className="text-3xl">{articleDetail.title}</h1>
           <div className="mt-4 flex items-center">
             <div className="h-10 w-10 bg-slate-300"></div>

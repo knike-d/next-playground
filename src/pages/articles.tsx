@@ -15,7 +15,7 @@ const Articles: NextPage<Props> = ({ displayArticles }) => {
         <title>Articles Page</title>
       </Head>
       <main>
-        <h1 className="mb-4 text-2xl font-medium">記事一覧</h1>
+        <h1 className="mb-4 ml-4 text-2xl font-medium">記事一覧</h1>
         <div className="m-auto flex max-w-4xl flex-wrap justify-center gap-x-6 gap-y-10">
           {displayArticles.map((articleInfo) => {
             return <ThumbnailCard card={articleInfo} />;
