@@ -1,13 +1,15 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
-import { Article } from "@/models/article";
+import { ArticleResponse } from "@/models/article";
 import { ThumbnailCard } from "@/components/atoms/ThumnailCard";
 import { maxDisplayArticlesCount } from "@/constants/article";
+import { microcmsClient } from "@/libs/microcms/client";
+import { ThumbnailCardInfo } from "@/models/card";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Articles: NextPage<Props> = ({ displayArticles }) => {
-  const blankDivCount = 3 - (displayArticles.length % 3);
+const Articles: NextPage<Props> = ({ displayArticleCards }) => {
+  const blankDivCount = 3 - (displayArticleCards.length % 3);
 
   return (
     <>
@@ -17,8 +19,8 @@ const Articles: NextPage<Props> = ({ displayArticles }) => {
       <main>
         <h1 className="mb-4 ml-4 text-2xl font-medium">記事一覧</h1>
         <div className="m-auto flex max-w-4xl flex-wrap justify-center gap-x-6 gap-y-10">
-          {displayArticles.map((articleInfo) => {
-            return <ThumbnailCard card={articleInfo} />;
+          {displayArticleCards.map((card) => {
+            return <ThumbnailCard card={card} />;
           })}
           {[...Array(blankDivCount)].map((el) => {
             return <div className="block h-0 w-64" />;
@@ -30,11 +32,20 @@ const Articles: NextPage<Props> = ({ displayArticles }) => {
 };
 
 export const getStaticProps = async () => {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/`);
-  const displayArticles: Article[] = await res.json();
+  const res: ArticleResponse = await microcmsClient.get({ endpoint: "articles" });
+  const articles = res.contents;
+
+  const cardInfo = articles.map((el, index) => {
+    const card: ThumbnailCardInfo = {
+      id: index + 1, // TODO: 記事作成日を利用すると良さそう
+      title: el.title,
+      userName: el.userName,
+    };
+    return card;
+  });
 
   return {
-    props: { displayArticles: displayArticles.slice(0, maxDisplayArticlesCount) },
+    props: { displayArticleCards: cardInfo.slice(0, maxDisplayArticlesCount) },
   };
 };
 

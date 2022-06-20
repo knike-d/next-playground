@@ -1,13 +1,25 @@
+export type ArticleResponse = {
+  contents: Article[];
+  totalCount: number;
+  offset: number;
+  limit: number;
+};
+
 export type Article = {
-  userId: number;
-  id: number;
+  id: string;
   title: string;
   body: string;
+  userName: string;
+
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  revisedAt: string;
 };
 
 export type ArticleDetail = {
-  userName: string;
-  id: number;
+  id: string;
   title: string;
   body: string;
+  userName: string;
 };

@@ -1,8 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import { Article, ArticleDetail } from "@/models/article";
-import { User } from "@/models/user";
-import { maxDisplayArticlesCount } from "@/constants/article";
+import { ArticleResponse, ArticleDetail } from "@/models/article";
+import { microcmsClient } from "@/libs/microcms/client";
 
 type Params = {
   id: string;
@@ -39,14 +38,13 @@ const Article: NextPage<Props> = ({ articleDetail }) => {
 };
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/`);
-  const articles: Article[] = await res.json();
-  const displayArticles = articles.slice(0, maxDisplayArticlesCount);
+  const res: ArticleResponse = await microcmsClient.get({ endpoint: "articles" });
+  const articles = res.contents;
 
-  const paths = displayArticles.map((el) => {
+  const paths = articles.map((el, index) => {
     return {
       params: {
-        id: el.id.toString(),
+        id: (index + 1).toString(),
       },
     };
   });
@@ -60,16 +58,20 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }) 
     };
   }
 
-  const postRes = await fetch(`https://jsonplaceholder.typicode.com/posts/${params.id}/`);
-  const article: Article = await postRes.json();
-  const UserRes = await fetch(`https://jsonplaceholder.typicode.com/users/${article.userId}/`);
-  const users: User = await UserRes.json();
+  const res: ArticleResponse = await microcmsClient.get({ endpoint: "articles" });
+  const articles = res.contents;
+  const article = articles.find((el, index) => (index + 1).toString() === params.id);
+  if (!article) {
+    return {
+      notFound: true,
+    };
+  }
 
   const articleDetail: ArticleDetail = {
-    userName: users.username,
     id: article.id,
     title: article.title,
     body: article.body,
+    userName: article.userName,
   };
 
   return {

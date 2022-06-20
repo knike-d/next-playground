@@ -1,12 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { ThumbnailCardInfo } from "@/models/card";
 
 type Props = {
-  card: Card;
-};
-type Card = {
-  id: number;
-  title: string;
+  card: ThumbnailCardInfo;
 };
 
 export const ThumbnailCard = ({ card }: Props) => {
