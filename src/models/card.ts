@@ -1,5 +1,5 @@
 export type ThumbnailCardInfo = {
-  id: number;
+  id: string;
   title: string;
   userName: string;
 };

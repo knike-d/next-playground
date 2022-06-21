@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import { ArticleResponse, ArticleDetail } from "@/models/article";
-import { microcmsClient } from "@/libs/microcms/client";
+import { ArticleDetail } from "@/models/article";
+import { getAllArticle, getArticlePath } from "@/functions/article";
 
 type Params = {
   id: string;
@@ -38,13 +38,13 @@ const Article: NextPage<Props> = ({ articleDetail }) => {
 };
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const res: ArticleResponse = await microcmsClient.get({ endpoint: "articles" });
-  const articles = res.contents;
+  const articles = await getAllArticle();
 
-  const paths = articles.map((el, index) => {
+  const articleMap = new Map<string, number>();
+  const paths = articles.map((el) => {
     return {
       params: {
-        id: (index + 1).toString(),
+        id: getArticlePath(el.createdAt, articleMap),
       },
     };
   });
@@ -58,9 +58,14 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }) 
     };
   }
 
-  const res: ArticleResponse = await microcmsClient.get({ endpoint: "articles" });
-  const articles = res.contents;
-  const article = articles.find((el, index) => (index + 1).toString() === params.id);
+  // FIXME: ファイルシステムキャッシュでapi呼び出しを1回にできる
+  const articles = await getAllArticle();
+  const articleMap = new Map<string, number>();
+  const article = articles.find((el) => {
+    const path = getArticlePath(el.createdAt, articleMap);
+    return path === params.id;
+  });
+
   if (!article) {
     return {
       notFound: true,

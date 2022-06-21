@@ -1,10 +1,9 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
-import { ArticleResponse } from "@/models/article";
 import { ThumbnailCard } from "@/components/atoms/ThumnailCard";
 import { maxDisplayArticlesCount } from "@/constants/article";
-import { microcmsClient } from "@/libs/microcms/client";
 import { ThumbnailCardInfo } from "@/models/card";
+import { getAllArticle, getArticlePath } from "@/functions/article";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -32,12 +31,12 @@ const Articles: NextPage<Props> = ({ displayArticleCards }) => {
 };
 
 export const getStaticProps = async () => {
-  const res: ArticleResponse = await microcmsClient.get({ endpoint: "articles" });
-  const articles = res.contents;
+  const articles = await getAllArticle();
 
-  const cardInfo = articles.map((el, index) => {
+  const articleMap = new Map<string, number>();
+  const cardInfo = articles.map((el) => {
     const card: ThumbnailCardInfo = {
-      id: index + 1, // TODO: 記事作成日を利用すると良さそう
+      id: getArticlePath(el.createdAt, articleMap),
       title: el.title,
       userName: el.userName,
     };
