@@ -3,7 +3,7 @@ import Head from "next/head";
 import { ThumbnailCard } from "@/components/atoms/ThumnailCard";
 import { maxDisplayArticlesCount } from "@/constants/article";
 import { ThumbnailCardInfo } from "@/models/card";
-import { getAllArticle, getArticlePath } from "@/functions/article";
+import { getAllArticle } from "@/functions/article";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -33,10 +33,9 @@ const Articles: NextPage<Props> = ({ displayArticleCards }) => {
 export const getStaticProps = async () => {
   const articles = await getAllArticle();
 
-  const articleMap = new Map<string, number>();
   const cardInfo = articles.map((el) => {
     const card: ThumbnailCardInfo = {
-      id: getArticlePath(el.createdAt, articleMap),
+      id: el.id,
       title: el.title,
       userName: el.userName,
     };

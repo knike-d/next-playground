@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { ArticleDetail } from "@/models/article";
-import { getAllArticle, getArticlePath } from "@/functions/article";
+import { getAllArticle, getArticle } from "@/functions/article";
 
 type Params = {
   id: string;
@@ -40,11 +40,10 @@ const Article: NextPage<Props> = ({ articleDetail }) => {
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
   const articles = await getAllArticle();
 
-  const articleMap = new Map<string, number>();
   const paths = articles.map((el) => {
     return {
       params: {
-        id: getArticlePath(el.createdAt, articleMap),
+        id: el.id,
       },
     };
   });
@@ -59,13 +58,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }) 
   }
 
   // FIXME: ファイルシステムキャッシュでapi呼び出しを1回にできる
-  const articles = await getAllArticle();
-  const articleMap = new Map<string, number>();
-  const article = articles.find((el) => {
-    const path = getArticlePath(el.createdAt, articleMap);
-    return path === params.id;
-  });
-
+  const article = await getArticle(params.id);
   if (!article) {
     return {
       notFound: true,

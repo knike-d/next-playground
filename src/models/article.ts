@@ -1,4 +1,4 @@
-export type ArticleResponse = {
+export type allArticleResponse = {
   contents: Article[];
   totalCount: number;
   offset: number;
