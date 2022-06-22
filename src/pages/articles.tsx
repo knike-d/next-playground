@@ -1,14 +1,14 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
 import { ThumbnailCard } from "@/components/atoms/ThumnailCard";
-import { maxDisplayArticlesCount } from "@/constants/article";
+import { maxDisplayArticles, maxDisplayColumn } from "@/constants/article";
 import { ThumbnailCardInfo } from "@/models/card";
 import { getAllArticle } from "@/functions/article";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Articles: NextPage<Props> = ({ displayArticleCards }) => {
-  const blankDivCount = 3 - (displayArticleCards.length % 3);
+const Articles: NextPage<Props> = ({ displayCards }) => {
+  const blankDivCount = maxDisplayColumn - (displayCards.length % maxDisplayColumn);
 
   return (
     <>
@@ -18,7 +18,7 @@ const Articles: NextPage<Props> = ({ displayArticleCards }) => {
       <main>
         <h1 className="mb-4 ml-4 text-2xl font-medium">記事一覧</h1>
         <div className="m-auto flex max-w-4xl flex-wrap justify-center gap-x-6 gap-y-10">
-          {displayArticleCards.map((card) => {
+          {displayCards.map((card) => {
             return <ThumbnailCard card={card} />;
           })}
           {[...Array(blankDivCount)].map((el) => {
@@ -34,16 +34,12 @@ export const getStaticProps = async () => {
   const articles = await getAllArticle();
 
   const cardInfo = articles.map((el) => {
-    const card: ThumbnailCardInfo = {
-      id: el.id,
-      title: el.title,
-      userName: el.userName,
-    };
+    const card: ThumbnailCardInfo = (({ id, title, userName }) => ({ id, title, userName }))(el);
     return card;
   });
 
   return {
-    props: { displayArticleCards: cardInfo.slice(0, maxDisplayArticlesCount) },
+    props: { displayCards: cardInfo.slice(0, maxDisplayArticles) },
   };
 };
 

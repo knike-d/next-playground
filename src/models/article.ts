@@ -5,12 +5,7 @@ export type allArticleResponse = {
   limit: number;
 };
 
-export type Article = {
-  id: string;
-  title: string;
-  body: string;
-  userName: string;
-
+export type Article = ArticleDetail & {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;

@@ -65,13 +65,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }) 
     };
   }
 
-  const articleDetail: ArticleDetail = {
-    id: article.id,
-    title: article.title,
-    body: article.body,
-    userName: article.userName,
-  };
-
+  const articleDetail: ArticleDetail = (({ id, title, body, userName }) => ({ id, title, body, userName }))(article);
   return {
     props: { articleDetail },
   };
