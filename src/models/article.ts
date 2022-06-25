@@ -1,20 +1,11 @@
-export type allArticleResponse = {
-  contents: Article[];
-  totalCount: number;
-  offset: number;
-  limit: number;
-};
+import { ActionDate } from "@/models/microcms";
+import { User } from "@/models/user";
 
-export type Article = ArticleDetail & {
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-  revisedAt: string;
-};
+export type Article = ArticleDetail & ActionDate;
 
 export type ArticleDetail = {
   id: string;
   title: string;
   body: string;
-  userName: string;
+  user: User;
 };

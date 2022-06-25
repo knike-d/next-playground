@@ -1,5 +1,6 @@
 import { microcmsClient } from "@/libs/microcms/client";
-import { allArticleResponse, Article } from "@/models/article";
+import { Article } from "@/models/article";
+import { ListMicrocmsResponse } from "@/models/microcms";
 import { sortDateByAsc, toUtc } from "@/utils/date";
 
 // 記事作成日からpathを生成する関数。pathを記事IDに変更するため一旦コメントアウト
@@ -12,7 +13,7 @@ import { sortDateByAsc, toUtc } from "@/utils/date";
 // };
 
 export const getAllArticle = async () => {
-  const res: allArticleResponse = await microcmsClient.get({ endpoint: "articles" });
+  const res: ListMicrocmsResponse<Article> = await microcmsClient.get({ endpoint: "articles" });
   const articles = res.contents;
   articles.sort((a, b) => sortDateByAsc(toUtc(a.createdAt), toUtc(b.createdAt)));
   return articles;

@@ -34,7 +34,7 @@ export const getStaticProps = async () => {
   const articles = await getAllArticle();
 
   const cardInfo = articles.map((el) => {
-    const card: ThumbnailCardInfo = (({ id, title, userName }) => ({ id, title, userName }))(el);
+    const card: ThumbnailCardInfo = (({ id, title, user }) => ({ id, title, userName: user.userName }))(el);
     return card;
   });
 
