@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { Article } from "@/models/article";
-import { getAllArticle, getArticle } from "@/functions/article";
+import { getArticleList, getArticle } from "@/functions/article";
 import { utcToStr, toUtc, DateFormat } from "@/utils/date";
 
 type Params = {
@@ -40,7 +40,7 @@ const Article: NextPage<Props> = ({ article }) => {
 };
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const articles = await getAllArticle();
+  const articles = await getArticleList();
 
   const paths = articles.map((el) => {
     return {

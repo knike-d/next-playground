@@ -1,13 +1,18 @@
 import type { InferGetStaticPropsType, NextPage } from "next";
 import Head from "next/head";
 import { ThumbnailCard } from "@/components/atoms/ThumnailCard";
-import { maxDisplayArticles, maxDisplayColumn } from "@/constants/article";
+import { articleListRevalidate, maxDisplayArticles, maxDisplayColumn } from "@/constants/article";
 import { ThumbnailCardInfo } from "@/models/card";
-import { getAllArticle } from "@/functions/article";
+import { getArticleList } from "@/functions/article";
+import { useRouter } from "next/router";
+import { Pagination } from "@/components/molecules/pagination";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-const Articles: NextPage<Props> = ({ displayCards }) => {
+const Articles: NextPage<Props> = ({ allCard }) => {
+  const router = useRouter();
+  const currentPage = (typeof router.query.page === "string" && parseInt(router.query.page)) || 1;
+  const displayCards = allCard.slice((currentPage - 1) * maxDisplayArticles, currentPage * maxDisplayArticles);
   const blankDivCount = maxDisplayColumn - (displayCards.length % maxDisplayColumn);
 
   return (
@@ -18,28 +23,30 @@ const Articles: NextPage<Props> = ({ displayCards }) => {
       <main>
         <h1 className="mb-4 ml-4 text-2xl font-medium">記事一覧</h1>
         <div className="m-auto flex max-w-4xl flex-wrap justify-center gap-x-6 gap-y-10">
-          {displayCards.map((card) => {
-            return <ThumbnailCard card={card} />;
-          })}
-          {[...Array(blankDivCount)].map((el) => {
-            return <div className="block h-0 w-64" />;
-          })}
+          {displayCards.map((card) => (
+            <ThumbnailCard card={card} key={card.id} />
+          ))}
+          {[...Array(blankDivCount)].map((_, index) => (
+            <div className="block h-0 w-64" key={"blankArticle" + index} />
+          ))}
         </div>
+        <Pagination per={maxDisplayArticles} totalCount={allCard.length}></Pagination>
       </main>
     </>
   );
 };
 
 export const getStaticProps = async () => {
-  const articles = await getAllArticle();
+  const articles = await getArticleList();
 
-  const cardInfo = articles.map((el) => {
+  const allCard = articles.map((el) => {
     const card: ThumbnailCardInfo = (({ id, title, user }) => ({ id, title, userName: user.userName }))(el);
     return card;
   });
 
   return {
-    props: { displayCards: cardInfo.slice(0, maxDisplayArticles) },
+    props: { allCard },
+    revalidate: articleListRevalidate,
   };
 };
 

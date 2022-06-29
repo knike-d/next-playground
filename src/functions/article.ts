@@ -1,4 +1,4 @@
-import { microcmsClient } from "@/libs/microcms/client";
+import { microcmsClient, MicroCMSQueries } from "@/libs/microcms/client";
 import { Article } from "@/models/article";
 import { ListMicrocmsResponse } from "@/models/microcms";
 import { sortDateByAsc, toUtc } from "@/utils/date";
@@ -12,8 +12,14 @@ import { sortDateByAsc, toUtc } from "@/utils/date";
 //   return `${basePath}-${pathIndex}`;
 // };
 
-export const getAllArticle = async () => {
-  const res: ListMicrocmsResponse<Article> = await microcmsClient.get({ endpoint: "articles" });
+export const getArticleList = async (queries: MicroCMSQueries = {}) => {
+  const res: ListMicrocmsResponse<Article> = await microcmsClient.getList({
+    endpoint: "articles",
+    queries: {
+      limit: 100,
+      ...queries,
+    },
+  });
   const articles = res.contents;
   articles.sort((a, b) => sortDateByAsc(toUtc(a.createdAt), toUtc(b.createdAt)));
   return articles;
