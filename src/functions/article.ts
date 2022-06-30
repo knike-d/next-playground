@@ -12,7 +12,7 @@ import { sortDateByDesc, toUtc } from "@/utils/date";
 //   return `${basePath}-${pathIndex}`;
 // };
 
-export const getArticleList = async (queries: MicroCMSQueries = {}) => {
+export const getArticleList = async (queries: MicroCMSQueries = {}): Promise<Article[]> => {
   const res: ListMicrocmsResponse<Article> = await microcmsClient.getList({
     endpoint: "articles",
     queries: {
@@ -25,7 +25,7 @@ export const getArticleList = async (queries: MicroCMSQueries = {}) => {
   return articles;
 };
 
-export const getArticle = async (id: string) => {
+export const getArticle = async (id: string): Promise<Article> => {
   const article: Article = await microcmsClient.get({ endpoint: `articles/${id}` });
   return article;
 };

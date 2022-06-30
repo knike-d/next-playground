@@ -7,7 +7,7 @@ const Search: NextPage = () => {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
 
-  const searchArticles = () => {
+  const searchArticles = (): void => {
     const searchQuery = searchInput && `?q=${searchInput}`;
     router.push(`${router.basePath}/articles${searchQuery}`);
   };

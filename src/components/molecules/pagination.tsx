@@ -6,7 +6,7 @@ type Props = {
   totalCount: number;
 };
 
-export const Pagination = (pageItemInfo: Props): JSX.Element => {
+export const Pagination = (pageItemInfo: Props) => {
   const router = useRouter();
   const first = 1;
   const last = Math.ceil(pageItemInfo.totalCount / pageItemInfo.per);

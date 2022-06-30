@@ -20,4 +20,4 @@ export const utcToStr = (date: string | Date, dateFormat: DateFormat): string =>
   return jstToStr(toJst(utcDate), dateFormat);
 };
 
-export const sortDateByDesc = (a: number | Date, b: number | Date) => compareDesc(a, b);
+export const sortDateByDesc = (a: number | Date, b: number | Date): number => compareDesc(a, b);

@@ -1,5 +1,6 @@
+import { NextPage } from "next";
 import Link from "next/link";
-const Custom404 = () => {
+const Custom404: NextPage = () => {
   return (
     <>
       <div className="flex items-center justify-center">
