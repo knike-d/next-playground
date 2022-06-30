@@ -1,4 +1,4 @@
-import { format, parseISO, compareAsc } from "date-fns";
+import { format, parseISO, compareDesc } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 
 export const DateFormat = {
@@ -20,4 +20,4 @@ export const utcToStr = (date: string | Date, dateFormat: DateFormat): string =>
   return jstToStr(toJst(utcDate), dateFormat);
 };
 
-export const sortDateByAsc = (a: number | Date, b: number | Date) => compareAsc(a, b);
+export const sortDateByDesc = (a: number | Date, b: number | Date) => compareDesc(a, b);
