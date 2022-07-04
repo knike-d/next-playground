@@ -8,10 +8,13 @@ export const Header = () => {
           <a className="mr-5">Home</a>
         </Link>
         <Link href="/articles">
-          <a>Articles</a>
+          <a className="mr-5">Articles</a>
+        </Link>
+        <Link href="/samples">
+          <a>UI Samples</a>
         </Link>
         <Link href="/articles/search">
-          <a className="mr-5 flex-1 text-right">Search</a>
+          <a className="mr-2 flex-1 text-right">Search</a>
         </Link>
       </nav>
     </div>
