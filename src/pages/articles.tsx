@@ -5,7 +5,7 @@ import { articleListRevalidate, maxDisplayArticles, maxDisplayColumn } from "@/c
 import { ThumbnailCardInfo } from "@/models/card";
 import { getArticleList } from "@/functions/article";
 import { useRouter } from "next/router";
-import { Pagination } from "@/components/molecules/pagination";
+import { Pagination } from "@/components/molecules/Pagination";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
