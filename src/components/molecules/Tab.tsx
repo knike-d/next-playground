@@ -39,22 +39,20 @@ export const Tab = ({ defaultKey, children }: PropsWithChildren<TabProps>) => {
 
   return (
     <TabContext.Provider value={tabManager}>
-      <div className="mx-10">
-        <div className="mb-5 flex justify-around">
-          {tabs.map(({ title, key }) => (
-            <div
-              key={key}
-              className={`w-full cursor-pointer border-b-2 border-gray-100 py-1 text-center ${
-                activeKey === key ? "border-gray-500" : ""
-              }`}
-              onClick={() => setActiveKey(key)}
-            >
-              {title}
-            </div>
-          ))}
-        </div>
-        <div className="mx-1">{children}</div>
+      <div className="mb-5 flex justify-around">
+        {tabs.map(({ title, key }) => (
+          <div
+            key={key}
+            className={`w-full cursor-pointer border-b-2 border-gray-100 py-1 text-center ${
+              activeKey === key ? "border-gray-500" : ""
+            }`}
+            onClick={() => setActiveKey(key)}
+          >
+            {title}
+          </div>
+        ))}
       </div>
+      <div className="mx-1">{children}</div>
     </TabContext.Provider>
   );
 };
